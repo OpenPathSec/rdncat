@@ -9,17 +9,18 @@ nc -vlp 1337
 
 Then from this directory, connect:
 ```sh
-swift run rdncat localhost 1337
+swift run rdncat localhost 1337 # use random source port, connect to localhost:1337
+swift run rdncat localhost 1337 2345 # set source port to 2345, connect to localhost:1337
 ```
 
-In the `nc` (netcat) window, you should see the connection like so, where `49322` is the random source port:
+In the `nc` (netcat) window, you should see the connection like so, where `5678` is the random source port:
 ```
-Connection from 127.0.0.1:49322
+Connection from 127.0.0.1:5678
 ```
 
 And in the `rdncat` window, you'll see the source port outputted as well:
 ```
-Connected from Optional(127.0.0.1:49489)
+Connected from Optional(127.0.0.1:5678)
 ```
 
 --------

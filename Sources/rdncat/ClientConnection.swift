@@ -25,7 +25,8 @@ class ClientConnection {
         case .waiting(let error):
             connectionDidFail(error: error)
         case .ready:
-            print("Client connection ready")
+            print(dump(nwConnection))
+            print("Connected from \(nwConnection.currentPath?.localEndpoint)")
         case .failed(let error):
             connectionDidFail(error: error)
         default:

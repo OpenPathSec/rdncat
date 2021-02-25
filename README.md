@@ -1,5 +1,29 @@
 # rdncat
 
+### Example Setup
+
+On a macOS system, listen on a local port:
+```sh
+nc -vlp 1337
+```
+
+Then from this directory, connect:
+```sh
+swift run rdncat localhost 1337
+```
+
+In the `nc` (netcat) window, you should see the connection like so, where `49322` is the random source port:
+```
+Connection from 127.0.0.1:49322
+```
+
+And in the `rdncat` window, you'll see the source port outputted as well:
+```
+Connected from Optional(127.0.0.1:49489)
+```
+
+--------
+
 A Client-Server command-line tool that provides an echo server for `TCP` connections and a client to connect to any server accepting `TCP` connections.
 
 The tool was created using [Apple's `NWFramework`](https://developer.apple.com/documentation/network).

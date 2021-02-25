@@ -5,17 +5,27 @@ import Network
 class Client {
     let connection: ClientConnection
     let host: NWEndpoint.Host
-    let port: NWEndpoint.Port
+    let destPort: NWEndpoint.Port
+    let srcPort: NWEndpoint.Port?
     
-    init(host: String, port: UInt16) {
+    init(host: String, destPort: UInt16, srcPort: UInt16?) {
         self.host = NWEndpoint.Host(host)
-        self.port = NWEndpoint.Port(rawValue: port)!
-        let nwConnection = NWConnection(host: self.host, port: self.port, using: .tcp)
-        connection = ClientConnection(nwConnection: nwConnection)
+        self.destPort = NWEndpoint.Port(rawValue: destPort)!
+        if let port = srcPort {
+            self.srcPort = NWEndpoint.Port(rawValue: port)!
+            let params = NWParameters(tls: nil, tcp: .init())
+            params.requiredLocalEndpoint = NWEndpoint.hostPort(host: .ipv4(.any), port: self.srcPort!)
+            let nwConnection = NWConnection(host: self.host, port: self.destPort, using: params)
+            connection = ClientConnection(nwConnection: nwConnection)
+        } else {
+            self.srcPort = nil
+            let nwConnection = NWConnection(host: self.host, port: self.destPort, using: .tcp)
+            connection = ClientConnection(nwConnection: nwConnection)
+        }
     }
     
     func start() {
-        print("Client started \(host) \(port)")
+        print("Client started \(host) \(destPort)")
         connection.didStopCallback = didStopCallback(error:)
         connection.start()
     }

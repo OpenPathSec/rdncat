@@ -9,8 +9,8 @@ func initServer(port: UInt16) {
     try! server.start()
 }
 
-func initClient(server: String, port: UInt16) {
-    let client = Client(host: server, port: port)
+func initClient(server: String, destPort: UInt16, srcPort: UInt16? = nil) {
+    let client = Client(host: server, destPort: destPort, srcPort: srcPort)
     client.start()
     while(true) {
       var command = readLine(strippingNewline: true)
@@ -44,10 +44,15 @@ if isServer {
     }
 } else {
     let server = CommandLine.arguments[1]
-    if let port = UInt16(CommandLine.arguments[2]) {
-      initClient(server: server, port: port)
+    if let destPort = UInt16(CommandLine.arguments[2]) {
+      if CommandLine.arguments.count >= 4 {
+        let srcPort = UInt16(CommandLine.arguments[3])
+        initClient(server: server, destPort: destPort, srcPort: srcPort)
+      } else {
+        initClient(server: server, destPort: destPort)
+      }
     } else {
-        print("Error invalid port")
+        print("Error invalid destination port")
     }
 }
 RunLoop.current.run()

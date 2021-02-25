@@ -2,14 +2,19 @@
 
 ### Example Setup
 
-On a macOS system, listen on a local port:
+On a macOS system, listen on a local port via netcat in a loop:
 ```sh
+while true; do nc -vlp 1337; sleep 1; done
+
+# alternatively, to just listen once (nc exits after a single connection)
 nc -vlp 1337
 ```
 
 Then from this directory, connect:
 ```sh
 swift run rdncat localhost 1337 # use random source port, connect to localhost:1337
+
+# or to specify source port
 swift run rdncat localhost 1337 2345 # set source port to 2345, connect to localhost:1337
 ```
 

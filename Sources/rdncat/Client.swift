@@ -11,17 +11,16 @@ class Client {
     init(host: String, destPort: UInt16, srcPort: UInt16?) {
         self.host = NWEndpoint.Host(host)
         self.destPort = NWEndpoint.Port(rawValue: destPort)!
+        let nwConnection: NWConnection
+        let params = NWParameters(tls: nil, tcp: .init())
         if let port = srcPort {
             self.srcPort = NWEndpoint.Port(rawValue: port)!
-            let params = NWParameters(tls: nil, tcp: .init())
             params.requiredLocalEndpoint = NWEndpoint.hostPort(host: .ipv4(.any), port: self.srcPort!)
-            let nwConnection = NWConnection(host: self.host, port: self.destPort, using: params)
-            connection = ClientConnection(nwConnection: nwConnection)
         } else {
             self.srcPort = nil
-            let nwConnection = NWConnection(host: self.host, port: self.destPort, using: .tcp)
-            connection = ClientConnection(nwConnection: nwConnection)
         }
+        nwConnection = NWConnection(host: self.host, port: self.destPort, using: params)
+        connection = ClientConnection(nwConnection: nwConnection)
     }
     
     func start() {
